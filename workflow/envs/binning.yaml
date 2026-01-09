@@ -1,0 +1,12 @@
+name: binning
+channels:
+  - bioconda
+  - conda-forge
+dependencies:
+  - metabat2=2.15
+  - concoct=1.1.0
+  - das_tool=1.1.6
+  - checkm-genome=1.2.2
+  - bowtie2=2.5.1
+  - samtools=1.17
+  - pplacer=1.1.alpha19

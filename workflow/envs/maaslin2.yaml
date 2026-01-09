@@ -1,0 +1,9 @@
+name: maaslin2
+channels:
+  - bioconda
+  - conda-forge
+  - r
+dependencies:
+  - r-base=4.3.1
+  - bioconductor-maaslin2=1.16.0
+  - r-optparse=1.7.3

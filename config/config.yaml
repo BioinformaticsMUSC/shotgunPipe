@@ -1,0 +1,120 @@
+# Metagenomics Shotgun Pipeline Configuration
+
+# Sample information
+sample_sheet: "config/samples.csv"
+
+# Input data directory
+data_dir: "data/raw"
+
+# Reference databases and indices
+databases:
+  # KneadData host genome (e.g., human GRCh38)
+  host_genome: "/path/to/host/genome/index"  # Update this path
+  
+  # MetaPhlAn4 database
+  metaphlan_db: "/path/to/metaphlan/db"      # Update this path
+  
+  # HUMAnN3 databases
+  chocophlan_db: "/path/to/chocophlan"       # Update this path
+  uniref_db: "/path/to/uniref90"             # Update this path
+
+# Tool parameters
+fastqc:
+  threads: 2
+
+kneaddata:
+  threads: 8
+  # Quality trimming parameters
+  trimmomatic_options: "SLIDINGWINDOW:4:20 MINLEN:50"
+  # Host contamination removal
+  bowtie2_options: "--very-sensitive --dovetail"
+
+metaphlan:
+  threads: 4
+  # Analysis type (rel_ab, reads_map, clade_profiles, marker_ab_table)
+  analysis_type: "rel_ab"
+  # Additional options
+  add_viruses: true
+  unknown_estimation: false
+
+humann:
+  threads: 8
+  # Memory settings
+  memory_use: "maximum"
+  # Nucleotide database search mode
+  search_mode: "uniref90"
+  # Bypass translated search
+  bypass_translated_search: false
+
+# Statistical analysis parameters  
+maaslin2:
+  min_abundance: 0.0
+  min_prevalence: 0.1
+  normalization: "TSS"  # Total Sum Scaling
+  transform: "LOG"
+  analysis_method: "LM"  # Linear Model
+  max_significance: 0.25
+  random_effects: null
+  fixed_effects: null  # Specify in your analysis script
+
+# Assembly parameters
+megahit:
+  threads: 8
+  min_contig_len: 1000
+  k_list: "21,33,55,77,99,121"
+  memory: 32  # GB
+
+metaspades:
+  threads: 8
+  memory: 64  # GB
+  k_list: "21,33,55,77,99,121"
+
+# Binning parameters
+metabat2:
+  threads: 8
+  min_contig_len: 2500
+  min_cv: 1.0
+  min_cv_sum: 1.0
+
+concoct:
+  threads: 8
+  chunk_size: 10000
+  overlap_size: 0
+
+checkm:
+  threads: 8
+
+dastool:
+  threads: 8
+
+# Annotation parameters
+prokka:
+  threads: 4
+  genus: "Bacteria"
+  species: "sp"
+
+dram:
+  threads: 8
+  min_contig_size: 2500
+
+eggnog:
+  threads: 8
+  database_dir: "/path/to/eggnog/db"  # Update this path
+  tax_scope: "auto"
+
+cazy:
+  threads: 4
+  database_dir: "/path/to/cazy/db"  # Update this path
+
+# Visualization parameters
+visualization:
+  distance_method: "bray"  # Distance method for ordination
+  top_taxa: 20  # Number of top taxa to show in plots
+  top_pathways: 20  # Number of top pathways to show
+  max_heatmap_features: 50  # Maximum features in heatmaps
+  cluster_samples: true  # Whether to cluster samples in heatmaps
+
+# MultiQC settings
+multiqc:
+  title: "Metagenomics Shotgun Analysis Report"
+  comment: "Quality control and analysis summary"

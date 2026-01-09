@@ -1,0 +1,12 @@
+name: annotation
+channels:
+  - bioconda
+  - conda-forge
+dependencies:
+  - prokka=1.14.6
+  - dram=1.4.6
+  - eggnog-mapper=2.1.9
+  - dbcan=4.0.0
+  - diamond=2.1.8
+  - hmmer=3.3.2
+  - prodigal=2.6.3
