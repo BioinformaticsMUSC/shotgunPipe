@@ -21,6 +21,79 @@ configfile: "config/config.yaml"
 samples_df = pd.read_csv(config["sample_sheet"])
 SAMPLES = samples_df["sample"].tolist()
 
+
+def _resolve_fastq_from_samplesheet(sample, read):
+    """
+    Resolve FASTQ path from explicit sample sheet columns when available.
+    """
+    # Prefer R1/R2 naming, but keep backward compatibility with forward/reverse.
+    has_r = "R1" in samples_df.columns and "R2" in samples_df.columns
+    has_forward_reverse = "forward" in samples_df.columns and "reverse" in samples_df.columns
+    if not has_r and not has_forward_reverse:
+        return None
+
+    row = samples_df.loc[samples_df["sample"] == sample]
+    if row.empty:
+        return None
+
+    if has_r:
+        col = "R1" if str(read) == "1" else "R2"
+    else:
+        col = "forward" if str(read) == "1" else "reverse"
+    value = row.iloc[0][col]
+    if pd.isna(value) or str(value).strip() == "":
+        return None
+
+    return str(Path(config["data_dir"]) / str(value))
+
+
+def _resolve_fastq_by_pattern(sample, read):
+    """
+    Resolve FASTQ path using common naming patterns, including Illumina _001 suffix.
+    """
+    data_dir = Path(config["data_dir"])
+    read = str(read)
+    patterns = [
+        f"{sample}_R{read}.fastq.gz",
+        f"{sample}_R{read}_001.fastq.gz",
+        f"*{sample}*R{read}_001.fastq.gz",
+        f"*{sample}*R{read}.fastq.gz",
+    ]
+
+    matches = []
+    for pattern in patterns:
+        matches.extend(sorted(data_dir.glob(pattern)))
+
+    # Preserve order while removing duplicates.
+    unique_matches = list(dict.fromkeys(matches))
+
+    if len(unique_matches) == 1:
+        return str(unique_matches[0])
+
+    if len(unique_matches) == 0:
+        raise ValueError(
+            f"No FASTQ matched sample '{sample}' read R{read} in {data_dir}. "
+            "Either set exact file names in samples.csv forward/reverse columns "
+            "or rename files to a supported pattern."
+        )
+
+    raise ValueError(
+        f"Multiple FASTQs matched sample '{sample}' read R{read}: "
+        f"{[str(p) for p in unique_matches]}\n"
+        "Please make sample identifiers more specific or set exact forward/reverse "
+        "file names in samples.csv."
+    )
+
+
+def get_fastq_path(sample, read):
+    """
+    Resolve FASTQ path by preferring explicit sample-sheet file names, then patterns.
+    """
+    from_sheet = _resolve_fastq_from_samplesheet(sample, read)
+    if from_sheet is not None:
+        return from_sheet
+    return _resolve_fastq_by_pattern(sample, read)
+
 # Define all output files
 rule all:
     input:

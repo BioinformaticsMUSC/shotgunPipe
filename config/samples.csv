@@ -1,4 +1,4 @@
-sample,sample_id,forward,reverse,condition
+sample,sample_id,R1,R2,condition
 sample01,S001,sample01_R1.fastq.gz,sample01_R2.fastq.gz,treatment
 sample02,S002,sample02_R1.fastq.gz,sample02_R2.fastq.gz,control
 sample03,S003,sample03_R1.fastq.gz,sample03_R2.fastq.gz,treatment

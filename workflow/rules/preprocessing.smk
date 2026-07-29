@@ -5,8 +5,8 @@ rule kneaddata:
     Remove host contamination and low-quality reads using KneadData
     """
     input:
-        r1=lambda wildcards: f"{config['data_dir']}/{wildcards.sample}_R1.fastq.gz",
-        r2=lambda wildcards: f"{config['data_dir']}/{wildcards.sample}_R2.fastq.gz"
+        r1=lambda wildcards: get_fastq_path(wildcards.sample, 1),
+        r2=lambda wildcards: get_fastq_path(wildcards.sample, 2)
     output:
         r1_clean="results/kneaddata/{sample}_kneaddata_paired_1.fastq",
         r2_clean="results/kneaddata/{sample}_kneaddata_paired_2.fastq",

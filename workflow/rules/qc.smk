@@ -5,7 +5,7 @@ rule fastqc:
     Run FastQC on raw reads
     """
     input:
-        fastq=lambda wildcards: f"{config['data_dir']}/{wildcards.sample}_R{wildcards.read}.fastq.gz"
+        fastq=lambda wildcards: get_fastq_path(wildcards.sample, wildcards.read)
     output:
         html="results/fastqc/{sample}_R{read}_fastqc.html",
         zip="results/fastqc/{sample}_R{read}_fastqc.zip"
