@@ -17,7 +17,7 @@ rule humann:
         uniref_db=config["databases"]["uniref_db"],
         search_mode=config["humann"]["search_mode"],
         memory_use=config["humann"]["memory_use"],
-        bypass_translated=config["humann"]["bypass_translated_search"]
+        bypass_translated_flag="--bypass-translated-search" if config["humann"]["bypass_translated_search"] else ""
     threads:
         config["humann"]["threads"]
     conda:
@@ -31,8 +31,7 @@ rule humann:
             --taxonomic-profile {input.metaphlan_profile} \
             --search-mode {params.search_mode} \
             --memory-use {params.memory_use} \
-            --threads {threads} \
-            {"--bypass-translated-search" if params.bypass_translated else ""} \
+            --threads {threads} {params.bypass_translated_flag} \
             --remove-temp-output
         """
 
