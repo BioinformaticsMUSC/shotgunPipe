@@ -1,0 +1,13 @@
+.DS_Store
+.snakemake/
+
+# Workflow outputs
+results/
+logs/
+
+# Local databases
+resources/databases/
+
+# Python cache
+__pycache__/
+*.pyc

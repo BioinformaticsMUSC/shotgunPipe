@@ -59,6 +59,14 @@ conda install -c bioconda -c conda-forge snakemake
 
 You'll need to download and configure the following databases:
 
+The easiest path is to let Snakemake prepare them all:
+
+```bash
+snakemake setup_databases --use-conda --cores 1
+```
+
+This fills `resources/databases/` with the host genome, MetaPhlAn, HUMAnN, eggNOG, and dbCAN databases used by the workflow.
+
 #### 1. Host Genome (e.g., Human GRCh38)
 ```bash
 # Download human genome for KneadData
@@ -87,11 +95,19 @@ humann_databases --download uniref uniref90_diamond /path/to/uniref90/
 Edit `config/config.yaml` to specify the correct paths to your reference databases:
 
 ```yaml
+db_root: "resources/databases"
+
 databases:
-  host_genome: "/path/to/host/genome/index"
-  metaphlan_db: "/path/to/metaphlan/db"  
-  chocophlan_db: "/path/to/chocophlan"
-  uniref_db: "/path/to/uniref90"
+  host_genome: "resources/databases/kneaddata/human"
+  metaphlan_db: "resources/databases/metaphlan"
+  chocophlan_db: "resources/databases/humann/chocophlan"
+  uniref_db: "resources/databases/humann/uniref90"
+
+eggnog:
+  database_dir: "resources/databases/eggnog"
+
+cazy:
+  database_dir: "resources/databases/dbcan"
 ```
 
 ### 2. Prepare Sample Sheet

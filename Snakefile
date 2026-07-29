@@ -58,6 +58,7 @@ rule all_advanced:
 
 # Include workflow rules
 include: "workflow/rules/qc.smk"
+include: "workflow/rules/databases.smk"
 include: "workflow/rules/preprocessing.smk" 
 include: "workflow/rules/taxonomy.smk"
 include: "workflow/rules/function.smk"

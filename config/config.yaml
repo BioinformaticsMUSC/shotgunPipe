@@ -6,17 +6,20 @@ sample_sheet: "config/samples.csv"
 # Input data directory
 data_dir: "data/raw"
 
+# Shared database root
+db_root: "resources/databases"
+
 # Reference databases and indices
 databases:
   # KneadData host genome (e.g., human GRCh38)
-  host_genome: "/path/to/host/genome/index"  # Update this path
+  host_genome: "resources/databases/kneaddata/human"
   
   # MetaPhlAn4 database
-  metaphlan_db: "/path/to/metaphlan/db"      # Update this path
+  metaphlan_db: "resources/databases/metaphlan"
   
   # HUMAnN3 databases
-  chocophlan_db: "/path/to/chocophlan"       # Update this path
-  uniref_db: "/path/to/uniref90"             # Update this path
+  chocophlan_db: "resources/databases/humann/chocophlan"
+  uniref_db: "resources/databases/humann/uniref90"
 
 # Tool parameters
 fastqc:
@@ -99,12 +102,12 @@ dram:
 
 eggnog:
   threads: 8
-  database_dir: "/path/to/eggnog/db"  # Update this path
+  database_dir: "resources/databases/eggnog"
   tax_scope: "auto"
 
 cazy:
   threads: 4
-  database_dir: "/path/to/cazy/db"  # Update this path
+  database_dir: "resources/databases/dbcan"
 
 # Visualization parameters
 visualization:
