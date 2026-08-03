@@ -145,6 +145,9 @@ snakemake --dry-run --cores 1
 # Run core pipeline (basic analysis)
 snakemake --use-conda --cores 8
 
+# Run core pipeline without visualization rules
+snakemake --use-conda --cores 8 --config skip_visualization=true
+
 # Run advanced pipeline (includes assembly, binning, annotation)
 snakemake all_advanced --use-conda --cores 8
 
@@ -169,6 +172,9 @@ snakemake results/binning/sample01/checkm/quality_summary.tsv --use-conda --core
 
 # Visualization only
 snakemake results/visualization/metagenomics_dashboard.html --use-conda --cores 4
+
+# Wrapper script without visualization
+./run_snakemake.sh --no-viz
 ```
 
 ### Cluster Execution

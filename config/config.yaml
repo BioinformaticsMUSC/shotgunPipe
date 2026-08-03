@@ -110,6 +110,7 @@ cazy:
   database_dir: "resources/databases/dbcan"
 
 # Visualization parameters
+skip_visualization: false
 visualization:
   distance_method: "bray"  # Distance method for ordination
   top_taxa: 20  # Number of top taxa to show in plots

@@ -22,6 +22,20 @@ samples_df = pd.read_csv(config["sample_sheet"])
 SAMPLES = samples_df["sample"].tolist()
 
 
+def _as_bool(value):
+    return str(value).lower() in ("1", "true", "yes", "on")
+
+
+SKIP_VISUALIZATION = _as_bool(config.get("skip_visualization", False))
+VISUALIZATION_TARGETS = [] if SKIP_VISUALIZATION else [
+    "results/visualization/pca_taxonomy.png",
+    "results/visualization/taxonomy_barplot.png",
+]
+ADVANCED_VISUALIZATION_TARGETS = [] if SKIP_VISUALIZATION else [
+    "results/visualization/metagenomics_dashboard.html",
+]
+
+
 def _resolve_fastq_from_samplesheet(sample, read):
     """
     Resolve FASTQ path from explicit sample sheet columns when available.
@@ -112,8 +126,7 @@ rule all:
         "results/humann/merged_genefamilies.tsv",
         "results/humann/merged_pathabundance.tsv",
         # Basic visualization
-        "results/visualization/pca_taxonomy.png",
-        "results/visualization/taxonomy_barplot.png",
+        *VISUALIZATION_TARGETS,
         # Final report
         "results/multiqc_report.html"
 
@@ -127,7 +140,7 @@ rule all_advanced:
         # Annotation 
         expand("results/annotation/{sample}/dram/genome_summaries.tsv", sample=SAMPLES),
         # Advanced visualization
-        "results/visualization/metagenomics_dashboard.html"
+        *ADVANCED_VISUALIZATION_TARGETS
 
 # Include workflow rules
 include: "workflow/rules/qc.smk"
@@ -139,4 +152,6 @@ include: "workflow/rules/stats.smk"
 include: "workflow/rules/assembly.smk"
 include: "workflow/rules/binning.smk"
 include: "workflow/rules/annotation.smk"
-include: "workflow/rules/visualization.smk"
+
+if not SKIP_VISUALIZATION:
+    include: "workflow/rules/visualization.smk"
